@@ -20,5 +20,3 @@ lazy val root = (project in file(".")).
         libraryDependencies += "io.spray" %%  "spray-json" % "1.3.5",
         libraryDependencies += "com.lihaoyi" %% "fastparse" % "2.2.2"
     )
-
-    mainClass in assembly := Some("Main")
