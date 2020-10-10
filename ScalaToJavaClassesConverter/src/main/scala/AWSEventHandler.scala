@@ -3,7 +3,11 @@ import spray.json._
 
 object AWSEventHandler
 {
+    
     import Protocol._
+    
+    val RESPONSE_HEADERS = Map("Access-Control-Allow-Origin" -> "*",
+        "Access-Control-Allow-Credentials" -> "true")
     
     def eventHandler(input : InputStream, output : OutputStream)
     {
@@ -13,7 +17,7 @@ object AWSEventHandler
         val requestHolder = body.parseJson.convertTo[RequestHolder]
         val resultHolder = RequestHandler.requestHandler(requestHolder)
         val resultHolderJson = resultHolder.toJson.prettyPrint
-        val awsResponse = AWSResponse(200, resultHolderJson)
+        val awsResponse = AWSResponse(200, resultHolderJson, RESPONSE_HEADERS)
         val awsResponseBodyJson = awsResponse.toJson.prettyPrint
         output.write(awsResponseBodyJson.getBytes("UTF-8"))
     }

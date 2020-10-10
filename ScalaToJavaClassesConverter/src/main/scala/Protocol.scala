@@ -6,7 +6,7 @@ import DefaultJsonProtocol._
 case class RequestHolder(scalaCode : String)
 case class AWSRequest(body : String)
 case class ResultHolder(javaCode : String)
-case class AWSResponse(statusCode : Int, body : String)
+case class AWSResponse(statusCode : Int, body : String, headers : Map[String, String])
 
 object Protocol
 {
