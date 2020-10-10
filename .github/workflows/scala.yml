@@ -22,9 +22,15 @@ jobs:
         java-version: 1.8
     - name: Run tests
       run: sbt test
+      working-directory: ./ScalaToJavaClassesConverter
     - name: Run assembly
       run: sbt assembly
       working-directory: ./ScalaToJavaClassesConverter
+    - name: Upload ScalaToJavaClassesConverter jar
+      uses: actions/upload-artifact@v2
+      with:
+        name: ScalaToJavaClassesConverter-assembly-0.1.jar
+        path: ./ScalaToJavaClassesConverter/target/scala-2.13
   deploy:
       name: deploy
       runs-on: ubuntu-latest
