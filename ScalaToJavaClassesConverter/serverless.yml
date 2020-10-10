@@ -1,0 +1,19 @@
+service: ScalaTo
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: java8
+
+package:
+  artifact: target/scala-2.13/ScalaToJavaClassesConverter-assembly-0.1.jar
+
+functions:
+  scalaToJavaConverter:
+    handler: AWSEventHandler::eventHandler
+    events:
+      - http:
+          path: ScalaToJavaConverter
+          method: post
+          cors: true
