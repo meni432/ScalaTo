@@ -24,7 +24,7 @@ jobs:
       run: sbt test
       working-directory: ./ScalaToJavaClassesConverter
     - name: Run assembly
-      run: sbt assembly
+      run: assembly
       working-directory: ./ScalaToJavaClassesConverter
     - name: Upload ScalaToJavaClassesConverter jar
       uses: actions/upload-artifact@v2
