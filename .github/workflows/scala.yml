@@ -32,7 +32,11 @@ jobs:
       name: deploy
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@v2
+      - name: Download ScalaToJavaClassesConverter jar
+        uses: actions/download-artifact@v2
+        with:
+          name: ScalaToJavaClassesConverter-assembly-0.1.jar
+          path: ./ScalaToJavaClassesConverter/target/scala-2.13 
       - name: Download Node
         uses: actions/setup-node@v1
         with:
