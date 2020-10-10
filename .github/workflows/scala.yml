@@ -23,20 +23,33 @@ jobs:
     - name: Run tests
       run: sbt test
       working-directory: ./ScalaToJavaClassesConverter
+    - name: Run assembly
+      run: sbt assembly
+      working-directory: ./ScalaToJavaClassesConverter
     - name: Upload ScalaToJavaClassesConverter jar
       uses: actions/upload-artifact@v2
       with:
         name: ScalaToJavaClassesConverter-assembly-0.1.jar
-        path: ./ScalaToJavaClassesConverter/target/scala-2.13
+        path: ./ScalaToJavaClassesConverter/target/scala-2.13/ScalaToJavaClassesConverter-assembly-0.1.jar
+    - name: Upload serverless.yml file
+      uses: actions/upload-artifact@v2
+      with:
+        name: serverless.yml
+        path: ./ScalaToJavaClassesConverter/serverless.yml
   deploy:
       name: deploy
+      needs: build
       runs-on: ubuntu-latest
       steps:
       - name: Download ScalaToJavaClassesConverter jar
         uses: actions/download-artifact@v2
         with:
           name: ScalaToJavaClassesConverter-assembly-0.1.jar
-          path: ./ScalaToJavaClassesConverter/target/scala-2.13  
+          path: ./target/scala-2.13  
+      - name: Download serverless file
+        uses: actions/download-artifact@v2
+        with:
+          name: serverless.yml
       - name: Download Node
         uses: actions/setup-node@v1
         with:
@@ -47,6 +60,5 @@ jobs:
         run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_DEV}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
       - name: Deploy to AWS
         run: serverless deploy -v -s dev
-        working-directory: "./ScalaToJavaClassesConverter"
         
       
