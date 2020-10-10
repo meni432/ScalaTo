@@ -3,8 +3,8 @@ name: Scala CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
 
 jobs:
   build:
@@ -23,11 +23,20 @@ jobs:
     - name: Run tests
       run: sbt test
       working-directory: ./ScalaToJavaClassesConverter
+    - name: Upload ScalaToJavaClassesConverter jar
+      uses: actions/upload-artifact@v2
+      with:
+        name: ScalaToJavaClassesConverter-assembly-0.1.jar
+        path: ./ScalaToJavaClassesConverter/target/scala-2.13
   deploy:
       name: deploy
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@v2
+      - name: Download ScalaToJavaClassesConverter jar
+        uses: actions/download-artifact@v2
+        with:
+          name: ScalaToJavaClassesConverter-assembly-0.1.jar
+          path: ./ScalaToJavaClassesConverter/target/scala-2.13  
       - name: Download Node
         uses: actions/setup-node@v1
         with:
@@ -36,10 +45,6 @@ jobs:
         run: npm install -g serverless
       - name: Serverless Authentication
         run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_DEV}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
-      - name: Install NPM dependencies
-        run: |
-          npm install
-          npm install "./resources"
       - name: Deploy to AWS
         run: serverless deploy -v -s dev
         working-directory: "./ScalaToJavaClassesConverter"
