@@ -22,6 +22,8 @@ jobs:
         java-version: 1.8
     - name: Run tests
       run: sbt test
+    - name: Run assembly
+      run: sbt assembly
       working-directory: ./ScalaToJavaClassesConverter
   deploy:
       name: deploy
@@ -36,8 +38,6 @@ jobs:
         run: npm install -g serverless
       - name: Serverless Authentication
         run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_DEV}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
-      - name: Run assembly
-        run: sbt assembly
       - name: Deploy to AWS
         run: serverless deploy -v -s dev
         working-directory: "./ScalaToJavaClassesConverter"
