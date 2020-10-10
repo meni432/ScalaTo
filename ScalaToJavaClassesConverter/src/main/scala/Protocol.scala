@@ -13,5 +13,5 @@ object Protocol
     implicit val RequestHolderFormat = jsonFormat1(RequestHolder)
     implicit val AWSRequestHolderFormat = jsonFormat1(AWSRequest)
     implicit val ResultHolderFormat = jsonFormat1(ResultHolder)
-    implicit val AWSResponseBodyFormat = jsonFormat2(AWSResponse)
+    implicit val AWSResponseBodyFormat = jsonFormat3(AWSResponse)
 }
