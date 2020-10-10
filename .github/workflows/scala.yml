@@ -31,7 +31,7 @@ jobs:
       with:
         name: ScalaToJavaClassesConverter-assembly-0.1.jar
         path: ./ScalaToJavaClassesConverter/target/scala-2.13
-    - name: Upload serverless file
+    - name: Upload serverless.yml file
       uses: actions/upload-artifact@v2
       with:
         name: serverless.yml
