@@ -1,6 +1,12 @@
 service: ScalaTo
 
-#frameworkVersion: ">=1.2.0 <2.0.0"
+plugins:
+  - serverless-api-gateway-throttling
+
+custom:
+  apiGatewayThrottling:
+    maxRequestsPerSecond: 10
+    maxConcurrentRequests: 10
 
 provider:
   name: aws
