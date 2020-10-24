@@ -5,6 +5,7 @@ editor.session.setMode("ace/mode/scala");
 const output = ace.edit("outputCode");
 output.setTheme("ace/theme/monokai");
 output.session.setMode("ace/mode/java");
+output.setReadOnly(true);
 
 async function postData(url, data) {
     const response = await fetch(url, {
