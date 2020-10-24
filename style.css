@@ -21,7 +21,7 @@ textarea {
 }
 
 button {
-    background-color: #353535;
+    background-color: #3C6E71;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -35,3 +35,13 @@ button {
     min-width: 600px;
     min-height: 200px;
 } 
+
+#editor { 
+  width: 600px;
+  height: 200px;
+}
+
+#outputCode { 
+  width: 600px;
+  height: 200px;
+}

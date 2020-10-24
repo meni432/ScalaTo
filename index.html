@@ -11,16 +11,17 @@
     <div>
       <h1>Scala case class to Java class Converter</h1>
       <div>
-        <textarea id="inputCode" class="input-code" placeholder="Scala code" required autofocus> </textarea>
+        <div id="editor">case class Test(l : List[String])</div>
       </div>
       <div>
         <button onclick="convert()">Convert to Java</button>
       </div>
       <div>
-        <textarea id="outputCode" class="input-code" placeholder="Java code" readonly> </textarea>
+        <div id="outputCode"></div>
       </div>
     </div>
 
-      <script src="script.js"></script>
+    <script src="https://pagecdn.io/lib/ace/1.4.12/ace.js" crossorigin="anonymous" integrity="sha256-Q9hnBpgBFstzZOr+OKFOWZWfcF5nFXO8Qz48Nmndo6U=" ></script>
+    <script src="script.js"></script>
   </body>
 </html>
