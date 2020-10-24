@@ -2,9 +2,10 @@ object LocalTestEventHandler extends App
 {
     val scalaCode =
         """
-          |case class A(a : String, b : String)
+          |case class A(a : Int, b : String)
           |case class B(a : String); // comment
           |case class C(a: String)
+          |case class D(l : List[Int])
           |""".stripMargin
 //      val scalaCode = "case class aba(a : A, b : B)"
     val requestHolder = RequestHolder(scalaCode)

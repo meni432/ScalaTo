@@ -19,9 +19,9 @@ object Lexical extends App
     
     private def caseClassSymbol[_: P] = P(whitespacePrefix ~ "case class")
     
-    private def variableType[_: P] = P(legalName)
+    private def genericType[_: P] = P(legalName.! ~ ("[" ~ legalName.! ~ "]").?)
     
-    private def variable[_: P] = P(legalName.! ~ ":" ~ variableType.!)
+    private def variable[_: P] = P(legalName.! ~ ":" ~ genericType)
     
     private def variablesList[_: P] = P(variable ~ ("," ~ variable).rep)
     
@@ -31,14 +31,11 @@ object Lexical extends App
     
     val s @ Parsed.Success(value, successIndex) = parse("case class aba(a : A, b : B) \n case class xyz()", parseCaseClasses(_))
     println(s)
-    println(value)
     
     
-    def lexicalAnalysis(string : String) : Seq[(String, Option[(String, String, Seq[(String, String)])])] =
+    def lexicalAnalysis(string : String) : Seq[(String, Option[(String, (String, Option[String]), Seq[(String, (String, Option[String]))])])] =
     {
         val Parsed.Success(value, successIndex) =  parse(string, parseCaseClasses(_))
         value
     }
-//    assert(value == (), successIndex == 1)
-    
 }

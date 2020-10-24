@@ -18,5 +18,7 @@ lazy val root = (project in file(".")).
         libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
         libraryDependencies += "com.amazonaws" % "aws-lambda-java-events" % "1.2.1",
         libraryDependencies += "io.spray" %%  "spray-json" % "1.3.5",
-        libraryDependencies += "com.lihaoyi" %% "fastparse" % "2.2.2"
+        libraryDependencies += "com.lihaoyi" %% "fastparse" % "2.2.2",
+        libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.0",
+        libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0" % "test"
     )

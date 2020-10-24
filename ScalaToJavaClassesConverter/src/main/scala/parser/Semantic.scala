@@ -5,7 +5,7 @@ import parser.SemanticElement.{CaseClass, Variable}
 object SemanticElement
 {
     
-    case class Variable(variableName : String, variableType : String)
+    case class Variable(variableName : String, variableType : String, variableInnerType : Option[String])
     
     case class CaseClass(caseClassName : String, caseClassVariable : Seq[Variable])
     
@@ -13,19 +13,19 @@ object SemanticElement
 
 object Semantic
 {
-    def semanticAnalysis(tokens : Seq[(String, Option[(String, String, Seq[(String, String)])])]) : Seq[CaseClass] =
+    def semanticAnalysis(tokens : Seq[(String, Option[(String, (String, Option[String]), Seq[(String, (String, Option[String]))])])]) : Seq[CaseClass] =
     {
         tokens.map
         {
-            case ((name, Some((firstVariableName, firstVariableType, otherElements)))) =>
+            case ((name, Some((firstVariableName, (firstVariableType, firstVariableInnerTypeOption), otherElements)))) =>
             {
-                val firstVariable = SemanticElement.Variable(firstVariableName, firstVariableType)
+                val firstVariable = SemanticElement.Variable(firstVariableName, firstVariableType, firstVariableInnerTypeOption)
                 
                 val otherVariable = otherElements.map
                 {
-                    case (variableName, variableType) =>
+                    case (variableName, (variableType, variableInnerTypeOption)) =>
                     {
-                        SemanticElement.Variable(variableName, variableType)
+                        SemanticElement.Variable(variableName, variableType, variableInnerTypeOption)
                     }
                 }
                 
