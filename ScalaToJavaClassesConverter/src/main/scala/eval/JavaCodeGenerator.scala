@@ -5,7 +5,7 @@ import parser.SemanticElement
 object JavaCodeGenerator
 {
     private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float")
-    private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer")
+    private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer", "Seq" -> "List")
     
     val a : Int = 1;
     
@@ -14,22 +14,40 @@ object JavaCodeGenerator
         caseClasses.map(caseClassToString).mkString("\n\n")
     }
     
-    private def variableToString(variable : SemanticElement.Variable) : String =
+    private def typeToString(variableType : SemanticElement.VariableType) : String =
     {
-        val SemanticElement.Variable(variableName, scalaVariableType, scalaVariableInnerTypeOption) = variable
+        val SemanticElement.VariableType(scalaVariableType, scalaVariableInnerTypeOption) = variableType
         val javaVariableType = PRIMITIVE_OBJECT_NAME_MAPPER.getOrElse(scalaVariableType, scalaVariableType)
-        scalaVariableInnerTypeOption match
+        val javaVariableInnerTypeOption = scalaVariableInnerTypeOption.map(scalaVariableInnerType => SCALA_TYPE_TO_JAVA_TYPE.getOrElse(scalaVariableInnerType, scalaVariableInnerType))
+    
+        javaVariableInnerTypeOption match
         {
-            case Some(scalaVariableInnerType) =>
+            case Some(javaVariableInnerType) =>
             {
-                s"$javaVariableType<${SCALA_TYPE_TO_JAVA_TYPE.getOrElse(scalaVariableInnerType, scalaVariableInnerType)}> $variableName;"
+                s"$javaVariableType<$javaVariableInnerType>"
             }
 
             case None =>
             {
-                s"$javaVariableType $variableName;"
+                javaVariableType
             }
         }
+    }
+    
+    private def variableToString(variable : SemanticElement.Variable) : String =
+    {
+        val SemanticElement.Variable(variableName, variableType) = variable
+        val javaVariableType = typeToString(variableType)
+        s"$javaVariableType $variableName;"
+    }
+    
+    private def variableToGetter(variable : SemanticElement.Variable) : String =
+    {
+        val SemanticElement.Variable(variableName, variableType) = variable
+        val javaVariableType = typeToString(variableType)
+        s"""public $javaVariableType get${variableName.capitalize} {
+           |    return $variableName;
+           |}""".stripMargin
     }
     
     private def caseClassToString(caseClass : SemanticElement.CaseClass) : String =
@@ -50,6 +68,17 @@ object JavaCodeGenerator
                 stringBuilder.append("\n")
             }
         }
+        
+        caseClassVariable.foreach
+        {
+            caseClassVariable =>
+            {
+                stringBuilder.append("\n")
+                stringBuilder.append(variableToGetter(caseClassVariable))
+                stringBuilder.append("\n")
+            }
+        }
+        
         stringBuilder.append("}")
         
         stringBuilder.mkString

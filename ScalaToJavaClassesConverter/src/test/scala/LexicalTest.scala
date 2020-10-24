@@ -10,7 +10,7 @@ class LexicalTest extends AnyFlatSpec with Matchers
     {
         val input = "case class A()"
         val output = Lexical.lexicalAnalysis(input)
-    
+        
         output shouldBe Seq(("A", None))
     }
     
@@ -19,22 +19,22 @@ class LexicalTest extends AnyFlatSpec with Matchers
         val input = "case class A(a : Int)"
         val output = Lexical.lexicalAnalysis(input)
         
-        output shouldBe Seq(("A",Some(("a",("Int", None),Nil))))
+        output shouldBe Seq(("A", Some(("a", ("Int", None), Nil))))
     }
     
     it should "parse multiple arguments case classes" in
     {
         val input = "case class A(a : Int, b : Int)"
         val output = Lexical.lexicalAnalysis(input)
-    
-        output shouldBe Seq(("A",Some(("a",("Int", None),Seq(("b", ("Int", None)))))))
+        
+        output shouldBe Seq(("A", Some(("a", ("Int", None), Seq(("b", ("Int", None)))))))
     }
     
     it should "parse case class with generic type argument" in
     {
         val input = "case class A(a : Box[Inner])"
         val output = Lexical.lexicalAnalysis(input)
-    
-        output shouldBe Seq(("A",Some(("a",("Box",Some("Inner")),Seq()))))
+        
+        output shouldBe Seq(("A", Some(("a", ("Box", Some("Inner")), Seq()))))
     }
 }

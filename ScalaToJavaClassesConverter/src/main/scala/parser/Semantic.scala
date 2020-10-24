@@ -4,11 +4,11 @@ import parser.SemanticElement.{CaseClass, Variable}
 
 object SemanticElement
 {
+    case class VariableType(variableType : String, variableInnerType : Option[String])
     
-    case class Variable(variableName : String, variableType : String, variableInnerType : Option[String])
+    case class Variable(variableName : String, variableType : VariableType)
     
     case class CaseClass(caseClassName : String, caseClassVariable : Seq[Variable])
-    
 }
 
 object Semantic
@@ -19,13 +19,13 @@ object Semantic
         {
             case ((name, Some((firstVariableName, (firstVariableType, firstVariableInnerTypeOption), otherElements)))) =>
             {
-                val firstVariable = SemanticElement.Variable(firstVariableName, firstVariableType, firstVariableInnerTypeOption)
+                val firstVariable = SemanticElement.Variable(firstVariableName, SemanticElement.VariableType(firstVariableType, firstVariableInnerTypeOption))
                 
                 val otherVariable = otherElements.map
                 {
                     case (variableName, (variableType, variableInnerTypeOption)) =>
                     {
-                        SemanticElement.Variable(variableName, variableType, variableInnerTypeOption)
+                        SemanticElement.Variable(variableName, SemanticElement.VariableType(variableType, variableInnerTypeOption))
                     }
                 }
                 

@@ -3,7 +3,6 @@ import spray.json._
 
 object AWSEventHandler
 {
-    
     import Protocol._
     
     val RESPONSE_HEADERS = Map("Access-Control-Allow-Origin" -> "*",
@@ -22,3 +21,5 @@ object AWSEventHandler
         output.write(awsResponseBodyJson.getBytes("UTF-8"))
     }
 }
+
+
