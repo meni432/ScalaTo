@@ -1,3 +1,6 @@
+const inputCode = document.getElementById('inputCode');
+const outputCode = document.getElementById('outputCode');
+
 async function postData(url, data) {
     const response = await fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -10,10 +13,6 @@ async function postData(url, data) {
     console.log(response)
     return response.json(); // parses JSON response into native JavaScript objects
   }
-  
-
-  const inputCode = document.getElementById('inputCode');
-  const outputCode = document.getElementById('outputCode');
 
 async function convert() {
     console.log("before send "+ inputCode.value)
