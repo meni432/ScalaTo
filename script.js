@@ -21,7 +21,7 @@ async function postData(url, data) {
 
 async function convert() {
     console.log("before send "+ editor.getValue())
-    return postData(' https://h63frmmax9.execute-api.us-east-1.amazonaws.com/dev/ScalaToJavaConverter', { scalaCode: inputCode.value })
+    return postData(' https://h63frmmax9.execute-api.us-east-1.amazonaws.com/dev/ScalaToJavaConverter', { scalaCode: editor.getValue() })
     .then(data => {
       console.log(data); 
       outputCode.value = data.javaCode;
