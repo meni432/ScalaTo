@@ -4,8 +4,8 @@ import parser.SemanticElement
 
 object JavaCodeGenerator
 {
-    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float")
-    private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer", "Seq" -> "List")
+    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float", "Option" -> "Optional")
+    private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer", "Seq" -> "List", "Option" -> "Optional")
     
     val a : Int = 1;
     

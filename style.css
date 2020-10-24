@@ -37,11 +37,11 @@ button {
 } 
 
 #editor { 
-  width: 600px;
-  height: 200px;
+  width: 1200px;
+  height: 400px;
 }
 
 #outputCode { 
-  width: 600px;
-  height: 200px;
+  width: 1200px;
+  height: 400px;
 }
