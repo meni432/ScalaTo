@@ -45,9 +45,21 @@ object JavaCodeGenerator
     {
         val SemanticElement.Variable(variableName, variableType) = variable
         val javaVariableType = typeToString(variableType)
-        s"""public $javaVariableType get${variableName.capitalize} {
-           |    return $variableName;
-           |}""".stripMargin
+        
+        val stringBuilder = new StringBuilder
+        
+        stringBuilder.append("\t")
+        stringBuilder.append(s"public $javaVariableType get${variableName.capitalize} {")
+        stringBuilder.append("\n")
+        stringBuilder.append("\t")
+        stringBuilder.append("\t")
+        stringBuilder.append(s"return $variableName")
+        stringBuilder.append("\n")
+        stringBuilder.append("\t")
+        stringBuilder.append("}")
+        stringBuilder.append("\n")
+        
+        stringBuilder.mkString
     }
     
     private def caseClassToString(caseClass : SemanticElement.CaseClass) : String =
