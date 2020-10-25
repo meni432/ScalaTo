@@ -4,10 +4,8 @@ import parser.SemanticElement
 
 object JavaCodeGenerator
 {
-    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float", "Option" -> "Optional")
+    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float", "Seq" -> "List", "Option" -> "Optional")
     private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer", "Seq" -> "List", "Option" -> "Optional")
-    
-    val a : Int = 1;
     
     def generator(caseClasses : Seq[SemanticElement.CaseClass]) =
     {
@@ -53,7 +51,7 @@ object JavaCodeGenerator
         stringBuilder.append("\n")
         stringBuilder.append("\t")
         stringBuilder.append("\t")
-        stringBuilder.append(s"return $variableName")
+        stringBuilder.append(s"return $variableName;")
         stringBuilder.append("\n")
         stringBuilder.append("\t")
         stringBuilder.append("}")
