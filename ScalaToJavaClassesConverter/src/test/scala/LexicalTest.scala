@@ -35,6 +35,14 @@ class LexicalTest extends AnyFlatSpec with Matchers
         val input = "case class A(a : Box[Inner])"
         val output = Lexical.lexicalAnalysis(input)
         
-        output shouldBe Seq(("A", Some(("a", ("Box", Some("Inner")), Seq()))))
+        output shouldBe Seq(("A", Some(("a", ("Box", Some(("Inner", None))), Nil))))
+    }
+    
+    it should "parse nested generic type" in
+    {
+        val input = "case class Test(optionalNumbers : First[Second[Third]])"
+        val output = Lexical.lexicalAnalysis(input)
+    
+        output shouldBe Seq(("Test",Some(("optionalNumbers",("First",Some(("Second",Some(("Third",None))))), Nil))))
     }
 }

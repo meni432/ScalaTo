@@ -1,33 +1,36 @@
 package eval
 
 import parser.SemanticElement
+import scala.annotation.tailrec
 
 object JavaCodeGenerator
 {
-    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "int", "Long" -> "long", "Double" -> "double", "Float" -> "float", "Seq" -> "List", "Option" -> "Optional")
-    private val SCALA_TYPE_TO_JAVA_TYPE = Map("Int" -> "Integer", "Seq" -> "List", "Option" -> "Optional")
+    private val PRIMITIVE_OBJECT_NAME_MAPPER = Map("Boolen" -> "bool", "Int" -> "Integer", "Long" -> "long", "Double" -> "double", "Float" -> "float", "Seq" -> "List", "Option" -> "Optional")
     
     def generator(caseClasses : Seq[SemanticElement.CaseClass]) =
     {
         caseClasses.map(caseClassToString).mkString("\n\n")
     }
     
-    private def typeToString(variableType : SemanticElement.VariableType) : String =
+    private def toJavaSting(stringType : String) : String =
     {
-        val SemanticElement.VariableType(scalaVariableType, scalaVariableInnerTypeOption) = variableType
-        val javaVariableType = PRIMITIVE_OBJECT_NAME_MAPPER.getOrElse(scalaVariableType, scalaVariableType)
-        val javaVariableInnerTypeOption = scalaVariableInnerTypeOption.map(scalaVariableInnerType => SCALA_TYPE_TO_JAVA_TYPE.getOrElse(scalaVariableInnerType, scalaVariableInnerType))
+        val javaVariableType = PRIMITIVE_OBJECT_NAME_MAPPER.getOrElse(stringType, stringType)
+        javaVariableType
+    }
     
-        javaVariableInnerTypeOption match
+    @tailrec
+    private def typeToString(variableType : SemanticElement.VariableType, rightAcc : String = "", leftAcc : String = "") : String =
+    {
+        variableType match
         {
-            case Some(javaVariableInnerType) =>
+            case variableTypeString :: Nil =>
             {
-                s"$javaVariableType<$javaVariableInnerType>"
+                s"$rightAcc${toJavaSting(variableTypeString)}$leftAcc"
             }
-
-            case None =>
+            
+            case variableTypeString :: tail =>
             {
-                javaVariableType
+                typeToString(tail, s"$rightAcc${toJavaSting(variableTypeString)}<", s">$leftAcc")
             }
         }
     }
@@ -37,27 +40,6 @@ object JavaCodeGenerator
         val SemanticElement.Variable(variableName, variableType) = variable
         val javaVariableType = typeToString(variableType)
         s"$javaVariableType $variableName;"
-    }
-    
-    private def variableToGetter(variable : SemanticElement.Variable) : String =
-    {
-        val SemanticElement.Variable(variableName, variableType) = variable
-        val javaVariableType = typeToString(variableType)
-        
-        val stringBuilder = new StringBuilder
-        
-        stringBuilder.append("\t")
-        stringBuilder.append(s"public $javaVariableType get${variableName.capitalize} {")
-        stringBuilder.append("\n")
-        stringBuilder.append("\t")
-        stringBuilder.append("\t")
-        stringBuilder.append(s"return $variableName;")
-        stringBuilder.append("\n")
-        stringBuilder.append("\t")
-        stringBuilder.append("}")
-        stringBuilder.append("\n")
-        
-        stringBuilder.mkString
     }
     
     private def caseClassToString(caseClass : SemanticElement.CaseClass) : String =
@@ -75,16 +57,6 @@ object JavaCodeGenerator
             {
                 stringBuilder.append("\t")
                 stringBuilder.append(variableToString(caseClassVariable))
-                stringBuilder.append("\n")
-            }
-        }
-        
-        caseClassVariable.foreach
-        {
-            caseClassVariable =>
-            {
-                stringBuilder.append("\n")
-                stringBuilder.append(variableToGetter(caseClassVariable))
                 stringBuilder.append("\n")
             }
         }

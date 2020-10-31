@@ -3,6 +3,7 @@ package parser
 
 object Lexical extends App
 {
+    type TypeBox = (String, Option[_])
     
     import fastparse._
     // TODO :: MS - remove ScalaWhitespace and support also comment converter
@@ -19,7 +20,7 @@ object Lexical extends App
     
     private def caseClassSymbol[_: P] = P(whitespacePrefix ~ "case class")
     
-    private def genericType[_: P] = P(legalName.! ~ ("[" ~ legalName.! ~ "]").?)
+    private def genericType[_: P] : P[(String, Option[_])] = P(legalName.! ~ ("[" ~ (genericType | legalName) ~ "]").?)
     
     private def variable[_: P] = P(legalName.! ~ ":" ~ genericType)
     
@@ -33,7 +34,7 @@ object Lexical extends App
     println(s)
     
     
-    def lexicalAnalysis(string : String) : Seq[(String, Option[(String, (String, Option[String]), Seq[(String, (String, Option[String]))])])] =
+    def lexicalAnalysis(string : String) : Seq[(String, Option[(String, TypeBox, Seq[(String, TypeBox)])])] =
     {
         val Parsed.Success(value, successIndex) =  parse(string, parseCaseClasses(_))
         value

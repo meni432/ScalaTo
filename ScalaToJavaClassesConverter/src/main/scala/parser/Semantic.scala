@@ -1,10 +1,36 @@
 package parser
 
-import parser.SemanticElement.{CaseClass, Variable}
+import parser.SemanticElement.{CaseClass, Variable, VariableType}
+import parser.TypeElement.HierarchyType
+import scala.annotation.tailrec
+
+object TypeElement
+{
+    type TypeDefinition = String
+    type HierarchyType = Seq[TypeDefinition]
+    val EMPTY_TYPE = Seq.empty[TypeDefinition]
+    
+    @tailrec
+    def convertToType(tokens : Lexical.TypeBox, acc : HierarchyType = EMPTY_TYPE) : HierarchyType =
+    {
+        tokens match
+        {
+            case (typeName, None) =>
+            {
+                acc :+ typeName
+            }
+
+            case (typeName, Some(innerType : Lexical.TypeBox)) =>
+            {
+                convertToType(innerType, acc :+ typeName)
+            }
+        }
+    }
+}
 
 object SemanticElement
 {
-    case class VariableType(variableType : String, variableInnerType : Option[String])
+    type VariableType = Seq[String]
     
     case class Variable(variableName : String, variableType : VariableType)
     
@@ -13,24 +39,26 @@ object SemanticElement
 
 object Semantic
 {
-    def semanticAnalysis(tokens : Seq[(String, Option[(String, (String, Option[String]), Seq[(String, (String, Option[String]))])])]) : Seq[CaseClass] =
+    def semanticAnalysis(tokens : Seq[(String, Option[(String, Lexical.TypeBox, Seq[(String, Lexical.TypeBox)])])]) : Seq[CaseClass] =
     {
         tokens.map
         {
-            case ((name, Some((firstVariableName, (firstVariableType, firstVariableInnerTypeOption), otherElements)))) =>
+            case ((name, Some((firstVariableName, typeBox, otherElements)))) =>
             {
-                val firstVariable = SemanticElement.Variable(firstVariableName, SemanticElement.VariableType(firstVariableType, firstVariableInnerTypeOption))
+                val hierarchyType = TypeElement.convertToType(typeBox)
+                val firstVariable = SemanticElement.Variable(firstVariableName, hierarchyType)
                 
                 val otherVariable = otherElements.map
                 {
-                    case (variableName, (variableType, variableInnerTypeOption)) =>
+                    case (variableName, innerTypeBox) =>
                     {
-                        SemanticElement.Variable(variableName, SemanticElement.VariableType(variableType, variableInnerTypeOption))
+                        val hierarchyType = TypeElement.convertToType(innerTypeBox)
+                        SemanticElement.Variable(variableName, hierarchyType)
                     }
                 }
                 
                 val combineVariable = firstVariable +: otherVariable
-                
+    
                 SemanticElement.CaseClass(name, combineVariable)
             }
 
